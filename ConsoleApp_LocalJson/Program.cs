@@ -20,32 +20,40 @@ namespace ConsoleApp_LocalJson
             Console.WriteLine("Month:");
             string month=Console.ReadLine().PadLeft(2,'0');
 
-            string jsonfile = year + ".json";
+            string jsonPath = year + ".json";
 
-            System.IO.StreamReader sr = File.OpenText(jsonfile);
-            string json = sr.ReadToEnd();
-            Console.WriteLine("json=");
-            Console.WriteLine(json);
-
-            List<string> HolidayListInMonth = new List<string>();
-
-            var root=JsonConvert.DeserializeObject<Holidays>(json);
-
-            var keys = root.Holiday.Keys;
-            Console.WriteLine("Key=:");
-            foreach(var key in keys)
+            if(!File.Exists(jsonPath))
             {
-                if(key.StartsWith(month))
+                Console.WriteLine("不存在：" + jsonPath);
+            }
+            else
+            {
+                System.IO.StreamReader sr = File.OpenText(jsonPath);
+                string json = sr.ReadToEnd();
+                Console.WriteLine("json=");
+                Console.WriteLine(json);
+
+                List<string> HolidayListInMonth = new List<string>();
+
+                var root = JsonConvert.DeserializeObject<Holidays>(json);
+
+                var keys = root.Holiday.Keys;
+                Console.WriteLine("Key=:");
+                foreach (var key in keys)
                 {
-                    Console.WriteLine(key);
-                    HolidayListInMonth.Add(key);
+                    if (key.StartsWith(month))
+                    {
+                        Console.WriteLine(key);
+                        HolidayListInMonth.Add(key);
+                    }
+                }
+                Console.WriteLine("Value=:");
+                foreach (var value in HolidayListInMonth)
+                {
+                    Console.WriteLine(value);
                 }
             }
-            Console.WriteLine("Value=:");
-            foreach(var value in HolidayListInMonth)
-            {
-                Console.WriteLine(value);
-            } 
+            
             Console.ReadKey();
 
         }
